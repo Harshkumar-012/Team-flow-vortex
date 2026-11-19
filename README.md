@@ -1,5 +1,4 @@
-# 🌿 AutoFlow
-
+# 🌿 Team-flow
 A responsive **team workspace prototype** built with HTML, CSS, and vanilla JavaScript. AutoFlow helps student project teams turn chat messages and meeting decisions into assigned tasks, track submissions, and see which version was accepted.
 
 > **One task, from the original decision to the final review.** AutoFlow demonstrates responsive front-end design, browser-based state management, and an interactive review workflow.
