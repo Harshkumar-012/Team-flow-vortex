@@ -1,16 +1,12 @@
-# React + Vite
+# TeamFlow React Homepage
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a component-based React + Vite homepage using the approved charcoal and muted-emerald visual direction.
 
-Currently, two official plugins are available:
+## Add to your existing project
+1. Copy the `src/components`, `src/pages`, `src/App.jsx`, `src/main.jsx`, and `src/index.css` files into your Vite project's `src` folder.
+2. If your `main.jsx` already mounts React, keep your existing mount setup and import `./index.css`.
+3. Run `npm run dev`.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+No extra npm packages are required. Google Fonts are loaded from Google Fonts; a system sans-serif fallback is provided.
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+The `/login`, `/signup`, `/privacy`, and `/terms` links are placeholders until those routes/pages are created. Dashboard data is static mock data.
