@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { ProjectsPage } from './pages/ProjectsPage'
 
 /* ---------- data ---------- */
 
@@ -121,7 +122,7 @@ function Logo({ size = 30 }) {
 
 /* ---------- sections ---------- */
 
-function Navbar() {
+function Navbar({ onOpenProjects }) {
   return (
     <header className="nav">
       <div className="container nav-inner">
@@ -130,8 +131,17 @@ function Navbar() {
           <a href="#features">Features</a>
           <a href="#about">About</a>
           <a href="#contact">Contact</a>
+          <button
+            type="button"
+            onClick={onOpenProjects}
+            style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }}
+          >
+            Projects
+          </button>
         </nav>
-        <a className="btn btn-primary btn-sm" href="#contact">Get Started →</a>
+        <button type="button" className="btn btn-primary btn-sm" onClick={onOpenProjects}>
+          Get Started →
+        </button>
       </div>
     </header>
   )
@@ -333,9 +343,15 @@ function Footer() {
 }
 
 export default function App() {
+  const [showProjects, setShowProjects] = useState(false)
+
+  if (showProjects) {
+    return <ProjectsPage onNavigateHome={() => setShowProjects(false)} />
+  }
+
   return (
     <>
-      <Navbar />
+      <Navbar onOpenProjects={() => setShowProjects(true)} />
       <main>
         <Hero />
         <Features />
