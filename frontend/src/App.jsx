@@ -3,8 +3,17 @@ import heroImg from './assets/hero.png'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import './App.css'
+import { Routes, Route } from 'react-router-dom'
+import Login from './pages/Login'
+import Dashboard from './pages/Dashboard'
+import Projects from './pages/Projects';
+import MyTasks from './pages/MyTasks';
+import TeamMembers from './pages/TeamMember';
+import Settings from './pages/Settings';
+import Layout from './components/Layout';
+import NotFound from './pages/NotFound';
 
-function App() {
+function Home() {
 const bars = [25, 42, 40, 58, 70, 82, 90];
 
 return (
@@ -187,6 +196,22 @@ return (
 </div>
 
 );
+}
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route element={<Layout/>}>
+     <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/projects" element={<Projects/>}/>
+      <Route path="/tasks" element={<MyTasks/>}/>
+      <Route path="/team" element={<TeamMembers/>}/>
+      <Route path="/settings" element={<Settings/>}/>
+    </Route>
+    <Route path="*" element={<NotFound/>}/>
+    <Route path="/login" element={<Login/>}/>\
+    </Routes>
+  )
 }
 
 export default App;
