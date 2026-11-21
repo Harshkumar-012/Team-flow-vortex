@@ -11,7 +11,7 @@ import {
   Users,
   Video,
 } from 'lucide-react';
-import { getProjectStatusPillClass } from './ProjectListing';
+import { getProjectStatusPillClass } from './projectStatus';
 
 const REVIEW_CYCLE = [
   'In Progress',

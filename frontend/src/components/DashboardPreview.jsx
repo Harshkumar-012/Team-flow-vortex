@@ -24,7 +24,7 @@ export default function DashboardPreview() {
             <div><span>Tasks completed</span><strong>64<em>%</em></strong><small className="green-text">↑ 12% this month</small></div>
             <div><span>Team members</span><strong>12</strong><small>Working together</small></div>
           </div>
-          <div className="board-heading"><div><h4>Project tasks</h4><p className="muted">A quick look at your team's work</p></div><span className="view-label">Board view　⌄</span></div>
+          <div className="board-heading"><div><h4>Project tasks</h4><p className="muted">A quick look at your team's work</p></div><span className="view-label">Board view ⌄</span></div>
           <div className="kanban">
             {columns.map(col=><section className="kanban-col" key={col.title}><div className="kanban-title">{col.title}<span>{col.count}</span></div>{col.tasks.map(task=><article className="task-card" key={task.name}><span className="task-tag">{task.tag}</span><b>{task.name}</b><div className="task-meta"><span className="tiny-avatar">{task.who}</span><span>•••</span></div></article>)}</section>)}
           </div>
