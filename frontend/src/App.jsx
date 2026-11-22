@@ -1,5 +1,9 @@
+
 import { useEffect, useRef, useState } from 'react'
 import { ProjectsPage } from './pages/ProjectsPage'
+import ProfilePage from './pages/ProfilePage'
+import SettingsPage from './pages/SettingsPage'
+import NotificationsPage from './pages/NotificationsPage'
 
 /* ---------- data ---------- */
 
@@ -35,24 +39,29 @@ const STATS = [
 function useInView(options = { threshold: 0.2 }) {
   const ref = useRef(null)
   const [inView, setInView] = useState(false)
+
   useEffect(() => {
     const el = ref.current
     if (!el) return
+
     const io = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         setInView(true)
         io.disconnect()
       }
     }, options)
+
     io.observe(el)
     return () => io.disconnect()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
   return [ref, inView]
 }
 
 function Reveal({ children, className = '', delay = 0, as: Tag = 'div' }) {
   const [ref, inView] = useInView()
+
   return (
     <Tag
       ref={ref}
@@ -66,20 +75,28 @@ function Reveal({ children, className = '', delay = 0, as: Tag = 'div' }) {
 
 function Counter({ value, decimals = 0, suffix = '', run }) {
   const [n, setN] = useState(0)
+
   useEffect(() => {
     if (!run) return
+
     let raf
     const start = performance.now()
     const dur = 1600
+
     const tick = (now) => {
       const p = Math.min((now - start) / dur, 1)
       const eased = 1 - Math.pow(1 - p, 3)
+
       setN(value * eased)
+
       if (p < 1) raf = requestAnimationFrame(tick)
     }
+
     raf = requestAnimationFrame(tick)
+
     return () => cancelAnimationFrame(raf)
   }, [run, value])
+
   return (
     <>
       {n.toFixed(decimals)}
@@ -89,16 +106,50 @@ function Counter({ value, decimals = 0, suffix = '', run }) {
 }
 
 function Icon({ name }) {
-  const p = { width: 20, height: 20, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round', strokeLinejoin: 'round' }
+  const p = {
+    width: 20,
+    height: 20,
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: 1.8,
+    strokeLinecap: 'round',
+    strokeLinejoin: 'round',
+  }
+
   switch (name) {
     case 'task':
-      return (<svg {...p}><rect x="4" y="4" width="16" height="16" rx="3" /><rect x="9" y="9" width="6" height="6" rx="1" /></svg>)
+      return (
+        <svg {...p}>
+          <rect x="4" y="4" width="16" height="16" rx="3" />
+          <rect x="9" y="9" width="6" height="6" rx="1" />
+        </svg>
+      )
+
     case 'track':
-      return (<svg {...p}><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="4" fill="currentColor" /></svg>)
+      return (
+        <svg {...p}>
+          <circle cx="12" cy="12" r="9" />
+          <circle cx="12" cy="12" r="4" fill="currentColor" />
+        </svg>
+      )
+
     case 'team':
-      return (<svg {...p}><path d="M12 3c2 2.5 4 3.5 6 4-.2 5-2 8-6 10-4-2-5.8-5-6-10 2-.5 4-1.5 6-4z" /><path d="M12 17v4M9 21h6" /></svg>)
+      return (
+        <svg {...p}>
+          <path d="M12 3c2 2.5 4 3.5 6 4-.2 5-2 8-6 10-4-2-5.8-5-6-10 2-.5 4-1.5 6-4z" />
+          <path d="M12 17v4M9 21h6" />
+        </svg>
+      )
+
     case 'chart':
-      return (<svg {...p}><rect x="4" y="4" width="16" height="16" rx="2" /><path d="M9 4v16M13 4v16M17 4v16" /></svg>)
+      return (
+        <svg {...p}>
+          <rect x="4" y="4" width="16" height="16" rx="2" />
+          <path d="M9 4v16M13 4v16M17 4v16" />
+        </svg>
+      )
+
     default:
       return null
   }
@@ -113,63 +164,112 @@ function Logo({ size = 30 }) {
           <stop offset="1" stopColor="#1d4ed8" />
         </linearGradient>
       </defs>
-      <path d="M8 6h20a6 6 0 0 1 6 6v20a2 2 0 0 1-2 2H14a6 6 0 0 1-6-6V6z" fill="url(#lg)" />
+
+      <path
+        d="M8 6h20a6 6 0 0 1 6 6v20a2 2 0 0 1-2 2H14a6 6 0 0 1-6-6V6z"
+        fill="url(#lg)"
+      />
+
       <circle cx="24" cy="26" r="6" fill="#021311" />
       <circle cx="13" cy="13" r="3" fill="#7ee0c3" opacity=".9" />
     </svg>
   )
 }
 
-/* ---------- sections ---------- */
+/* ---------- navigation ---------- */
 
-function Navbar({ onOpenProjects }) {
+function Navbar({
+  onOpenProjects,
+  onOpenProfile,
+  onOpenSettings,
+  onOpenNotifications,
+}) {
   return (
     <header className="nav">
       <div className="container nav-inner">
-        <a className="brand" href="#top"><Logo /> TeamFlow</a>
+
+        <a className="brand" href="#top">
+          <Logo /> TeamFlow
+        </a>
+
         <nav className="nav-links">
           <a href="#features">Features</a>
           <a href="#about">About</a>
           <a href="#contact">Contact</a>
-          <button
-            type="button"
-            onClick={onOpenProjects}
-            style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }}
-          >
+
+          <button type="button" onClick={onOpenProjects}>
             Projects
           </button>
+
+          <button type="button" onClick={onOpenProfile}>
+            Profile
+          </button>
+
+          <button type="button" onClick={onOpenSettings}>
+            Settings
+          </button>
+
+          <button type="button" onClick={onOpenNotifications}>
+            Notifications
+          </button>
         </nav>
-        <button type="button" className="btn btn-primary btn-sm" onClick={onOpenProjects}>
+
+        <button
+          type="button"
+          className="btn btn-primary btn-sm"
+          onClick={onOpenProjects}
+        >
           Get Started →
         </button>
+
       </div>
     </header>
   )
 }
 
+/* ---------- home sections ---------- */
+
 function Hero() {
   return (
     <section className="hero" id="top">
       <div className="hero-glow" />
+
       <div className="container hero-grid">
         <div className="hero-copy">
           <span className="eyebrow">Team workspace</span>
-          <h1>Work together.<br />Move <span className="grad">forward.</span></h1>
+
+          <h1>
+            Work together.<br />
+            Move <span className="grad">forward.</span>
+          </h1>
+
           <p className="lead">
             TeamFlow brings your projects, tasks, and people into one calm
             workspace so every team can plan, deliver, and celebrate together.
           </p>
+
           <div className="hero-cta">
-            <a className="btn btn-primary" href="#contact">Get Started Free →</a>
+            <a className="btn btn-primary" href="#contact">
+              Get Started Free →
+            </a>
+
             <a className="btn btn-ghost" href="#about">
-              <span className="play"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M3 1.5v9l7.5-4.5z" fill="currentColor" /></svg></span>
+              <span className="play">
+                <svg width="12" height="12" viewBox="0 0 12 12">
+                  <path d="M3 1.5v9l7.5-4.5z" fill="currentColor" />
+                </svg>
+              </span>
               Watch Demo
             </a>
           </div>
+
           <div className="trust">
             <div className="avatars">
-              {['I', 'H', 'V', 'S'].map((c) => (<span key={c} className="avatar">{c}</span>))}
+              {['I', 'H', 'V', 'S'].map((c) => (
+                <span key={c} className="avatar">{c}</span>
+              ))}
             </div>
+
             <span>Trusted by 10K+ teams worldwide</span>
           </div>
         </div>
@@ -177,21 +277,34 @@ function Hero() {
         <div className="hero-visual">
           <div className="dash">
             <div className="dash-row">
-              <div><strong>Design system update</strong><small>Due tomorrow</small></div>
+              <div>
+                <strong>Design system update</strong>
+                <small>Due tomorrow</small>
+              </div>
               <span className="pill">In progress</span>
             </div>
+
             <div className="dash-row">
-              <div><strong>Prepare sprint roadmap</strong><small>Owned by Harper</small></div>
+              <div>
+                <strong>Prepare sprint roadmap</strong>
+                <small>Owned by Harper</small>
+              </div>
               <span className="pill">In review</span>
             </div>
+
             <div className="dash-row members">
-              <div><strong>Team Members</strong><small>Your team is working together</small></div>
+              <div>
+                <strong>Team Members</strong>
+                <small>Your team is working together</small>
+              </div>
+
               <div className="faces">
                 <i /><i /><i /><i />
                 <b>+3</b>
               </div>
             </div>
           </div>
+
           <div className="float-badge">✓ Sprint goals on track</div>
         </div>
       </div>
@@ -200,7 +313,10 @@ function Hero() {
         <div className="strip">
           {FEATURES.map((f) => (
             <div className="strip-item" key={f.title}>
-              <span className="icon-box"><Icon name={f.icon} /></span>
+              <span className="icon-box">
+                <Icon name={f.icon} />
+              </span>
+
               <div>
                 <strong>{f.title}</strong>
                 <small>{f.short}</small>
@@ -220,12 +336,19 @@ function Features() {
         <Reveal className="section-head">
           <span className="eyebrow">Everything in one place</span>
           <h2>Tools that move your team forward</h2>
-          <p>Less switching between apps. More time for focused work, clear communication, and meaningful results.</p>
+          <p>
+            Less switching between apps. More time for focused work,
+            clear communication, and meaningful results.
+          </p>
         </Reveal>
+
         <div className="grid-4">
           {FEATURES.map((f, i) => (
             <Reveal key={f.title} delay={i * 90} className="card feature-card">
-              <span className="icon-box"><Icon name={f.icon} /></span>
+              <span className="icon-box">
+                <Icon name={f.icon} />
+              </span>
+
               <h3>{f.title}</h3>
               <p>{f.text}</p>
             </Reveal>
@@ -245,18 +368,28 @@ function About() {
           <div className="orbit-star">✦</div>
           <div className="cube"><span /></div>
         </Reveal>
+
         <Reveal className="about-copy" delay={120}>
           <span className="eyebrow">Built for modern teams</span>
           <h2>A smarter way to manage work</h2>
+
           <p>
             From student teams to growing businesses, TeamFlow helps people work
             smarter, stay connected, and deliver their best work. Keep
             responsibilities clear and projects moving without unnecessary complexity.
           </p>
+
           <ul className="checks">
-            {CHECKS.map((c) => (<li key={c}><span>✓</span>{c}</li>))}
+            {CHECKS.map((c) => (
+              <li key={c}>
+                <span>✓</span>{c}
+              </li>
+            ))}
           </ul>
-          <a className="btn btn-outline" href="#features">Explore TeamFlow →</a>
+
+          <a className="btn btn-outline" href="#features">
+            Explore TeamFlow →
+          </a>
         </Reveal>
       </div>
     </section>
@@ -270,8 +403,12 @@ function Steps() {
         <Reveal className="section-head">
           <span className="eyebrow">Simple workflow</span>
           <h2>Get started in four simple steps</h2>
-          <p>Set up your workspace once, then give your team a clear path from planning to delivery.</p>
+          <p>
+            Set up your workspace once, then give your team a clear path
+            from planning to delivery.
+          </p>
         </Reveal>
+
         <div className="grid-4">
           {STEPS.map((s, i) => (
             <Reveal key={s.n} delay={i * 90} className="card step-card">
@@ -288,20 +425,30 @@ function Steps() {
 
 function Stats() {
   const [ref, inView] = useInView({ threshold: 0.35 })
+
   return (
     <section className="section">
       <div className="container" ref={ref}>
         <Reveal className="section-head">
           <span className="eyebrow">Our impact</span>
           <h2>Numbers that speak for themselves</h2>
-          <p>One shared space to help teams stay focused and make progress visible.</p>
+          <p>
+            One shared space to help teams stay focused and make progress visible.
+          </p>
         </Reveal>
+
         <div className="grid-4">
           {STATS.map((s) => (
             <div className="card stat-card" key={s.label}>
               <div className="stat-num">
-                <Counter value={s.value} decimals={s.decimals} suffix={s.suffix} run={inView} />
+                <Counter
+                  value={s.value}
+                  decimals={s.decimals}
+                  suffix={s.suffix}
+                  run={inView}
+                />
               </div>
+
               <div className="stat-label">{s.label}</div>
             </div>
           ))}
@@ -318,8 +465,13 @@ function CTA() {
         <Reveal className="cta">
           <span className="eyebrow">Make teamwork flow</span>
           <h2>Ready to do your best work?</h2>
-          <p>Bring your projects, tasks, and people together with TeamFlow.</p>
-          <a className="btn btn-primary" href="#top">Get Started Free →</a>
+          <p>
+            Bring your projects, tasks, and people together with TeamFlow.
+          </p>
+
+          <a className="btn btn-primary" href="#top">
+            Get Started Free →
+          </a>
         </Reveal>
       </div>
     </section>
@@ -330,8 +482,14 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="container footer-inner">
-        <a className="brand" href="#top"><Logo size={28} /> TeamFlow</a>
-        <span className="copy">© {new Date().getFullYear()} TeamFlow. All rights reserved.</span>
+        <a className="brand" href="#top">
+          <Logo size={28} /> TeamFlow
+        </a>
+
+        <span className="copy">
+          © {new Date().getFullYear()} TeamFlow. All rights reserved.
+        </span>
+
         <nav>
           <a href="#features">Features</a>
           <a href="#about">About</a>
@@ -342,16 +500,129 @@ function Footer() {
   )
 }
 
-export default function App() {
-  const [showProjects, setShowProjects] = useState(false)
+/* ---------- internal page navigation ---------- */
 
-  if (showProjects) {
-    return <ProjectsPage onNavigateHome={() => setShowProjects(false)} />
+function PageNavigation({ activePage, onNavigate }) {
+  const pages = [
+    { id: 'home', label: 'Home' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'profile', label: 'Profile' },
+    { id: 'settings', label: 'Settings' },
+    { id: 'notifications', label: 'Notifications' },
+  ]
+
+  return (
+    <header
+      style={{
+        padding: '18px 5%',
+        background: '#07100d',
+        borderBottom: '1px solid rgba(43,245,155,0.15)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '14px',
+      }}
+    >
+      <a
+        className="brand"
+        href="#top"
+        onClick={(e) => {
+          e.preventDefault()
+          onNavigate('home')
+        }}
+      >
+        <Logo /> TeamFlow
+      </a>
+
+      <nav style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        {pages.map((page) => (
+          <button
+            key={page.id}
+            type="button"
+            onClick={() => onNavigate(page.id)}
+            style={{
+              padding: '9px 14px',
+              borderRadius: '9px',
+              border: '1px solid rgba(43,245,155,0.2)',
+              background:
+                activePage === page.id ? '#164b36' : 'transparent',
+              color: '#fff',
+              cursor: 'pointer',
+              font: 'inherit',
+            }}
+          >
+            {page.label}
+          </button>
+        ))}
+      </nav>
+    </header>
+  )
+}
+
+/* ---------- main app ---------- */
+
+export default function App() {
+  const [activePage, setActivePage] = useState('home')
+
+  const openPage = (page) => {
+    setActivePage(page)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  if (activePage === 'projects') {
+    return (
+      <ProjectsPage
+        onNavigateHome={() => openPage('home')}
+      />
+    )
+  }
+
+  if (activePage === 'profile') {
+    return (
+      <div className="tf-page-wrapper">
+        <PageNavigation
+          activePage={activePage}
+          onNavigate={openPage}
+        />
+       <ProfilePage onBack={() => openPage('home')} />
+      </div>
+    )
+  }
+
+  if (activePage === 'settings') {
+    return (
+      <div className="tf-page-wrapper">
+        <PageNavigation
+          activePage={activePage}
+          onNavigate={openPage}
+        />
+        <SettingsPage />
+      </div>
+    )
+  }
+
+  if (activePage === 'notifications') {
+    return (
+      <div className="tf-page-wrapper">
+        <PageNavigation
+          activePage={activePage}
+          onNavigate={openPage}
+        />
+        <NotificationsPage />
+      </div>
+    )
   }
 
   return (
     <>
-      <Navbar onOpenProjects={() => setShowProjects(true)} />
+      <Navbar
+        onOpenProjects={() => openPage('projects')}
+        onOpenProfile={() => openPage('profile')}
+        onOpenSettings={() => openPage('settings')}
+        onOpenNotifications={() => openPage('notifications')}
+      />
+
       <main>
         <Hero />
         <Features />
@@ -360,6 +631,7 @@ export default function App() {
         <Stats />
         <CTA />
       </main>
+
       <Footer />
     </>
   )
