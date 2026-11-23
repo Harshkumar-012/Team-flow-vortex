@@ -1,3 +1,4 @@
+
 @import "tailwindcss";
 
 :root {
@@ -15,10 +16,12 @@
   --sans: "DM Sans", system-ui, sans-serif;
 }
 
+/* Global HTML */
 html {
   scroll-behavior: smooth;
 }
 
+/* Body */
 body {
   margin: 0;
   background: var(--bg);
@@ -28,10 +31,55 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Root Layout */
 #root {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  text-align: center;
+  min-height: 100vh;
   min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
 
+/* Headings */
+h1,
+h2 {
+  font-family: var(--heading);
+  font-weight: 500;
+  color: var(--text);
+}
+
+h1 {
+  font-size: 56px;
+  letter-spacing: -1.68px;
+  margin: 32px 0;
+
+  @media (max-width: 1024px) {
+    font-size: 36px;
+    margin: 20px 0;
+  }
+}
+
+h2 {
+  font-size: 24px;
+  line-height: 118%;
+  letter-spacing: -0.24px;
+  margin: 0 0 8px;
+
+  @media (max-width: 1024px) {
+    font-size: 20px;
+  }
+}
+
+/* Paragraphs */
+p {
+  margin: 0;
+}
+
+/* Universal Box Sizing */
 * {
   box-sizing: border-box;
 }
