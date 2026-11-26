@@ -1,13 +1,34 @@
-import express from 'express';
-import cors from 'cors';
+const express = require("express");
+const cors = require("cors");
 
 const app = express();
 
+// CORS Configuration
 app.use(cors());
+
+// Parse JSON
 app.use(express.json());
 
-app.get('/api/health', (req, res) => {
-    res.json({ message: 'TeamFlow Backend is running!' });
+// Parse URL encoded data
+app.use(express.urlencoded({ extended: true }));
+
+// Home Route
+app.get("/", (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: "Backend API is running successfully"
+    });
 });
 
-export default app;
+// Authentication Routes
+app.use("/api/auth", require("./routes/authRoutes"));
+
+// 404 Handler
+app.use((req, res) => {
+    res.status(404).json({
+        success: false,
+        message: "Route not found"
+    });
+});
+
+module.exports = app;
